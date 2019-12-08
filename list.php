@@ -11,7 +11,7 @@
 	$owner = $_GET['owner'];
 	echo "$type";
 	if ($type != 'all'){
-		$query = "SELECT * FROM $table WHERE type = '$type' AND owner = '$owner' ORDER BY $order";
+		$query = "SELECT * FROM $table WHERE type = '$type' AND owner = '$owner' ORDER BY $order";//сортировать данные
 	}
 	else{
 		$query = "SELECT * FROM $table";
@@ -67,17 +67,17 @@
 	<article>
 		
 		
-			<?php while ($row = mysqli_fetch_row($res)) {
-				$id = $row[0];
+			<?php while ($row = mysqli_fetch_row($res)) {//берем данные и переводим их в масси, функция просто переходит по строкам вывода, то есть сначала первая строчка ответа, потом вторая, пока не станет пустой
+				$id = $row[0];//айди - 1 столбец
 				$thing_type = $row[1];
 				$thing_name = $row[2];
 				$thing_discr = $row[3];
 				$thing_owner = $row[4];
 				$thing_price = $row[5];
-				$thing_pict = $row[6];
-				$thing_likes = $row[7];
-				$thing_nlike = $row[8];
-				$likes = $thing_likes / $thing_nlike;
+				$thing_pict = $row[6];//путь на картинку
+				$thing_likes = $row[7];//сумма оценок
+				$thing_nlike = $row[8];//число оценок
+				$likes = $thing_likes / $thing_nlike;//среднее арифметическое, иногда это ноль на ноль, но ошибки не вызывают проблем)) а так проверить число оценок нужно
 				echo "
 				<div class='box'>
 				<a href='card.php?id=$id'><img src='$thing_pict'></a>
@@ -86,7 +86,7 @@
 				<p>$thing_owner</p>
 				<p>$thing_price</p>
 				<p>$likes</p>
-				</div>";	
+				</div>";	//вывод 
 			} ?>
 			
 		

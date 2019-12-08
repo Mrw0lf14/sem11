@@ -1,5 +1,5 @@
 <?php 
-	session_start();
+	session_start();//проверка на вход, если уже авторизован, то перенаправляем на контент
 	if (isset($_SESSION['username'])){
 		header("Location: list.php");
 		exit();
@@ -32,11 +32,10 @@
 
 	$link = mysqli_connect($host, $user, $pswd, $database) or die("Ошибка " . mysqli_error($link));// подключаемся к серверу
 
-	if (isset($_POST['name']) )
+	if (isset($_POST['name']) )//если имя утановлено, потому что во время загрузки страницы пхп тоже обрабатывается
 	{
 		$query = "SELECT * FROM $table WHERE name ='$username'";//создаем запрос
 		$res = mysqli_query($link ,$query);//выполняем запрос
-		echo "sdsd";
 
 		if ($res){
 			$row = mysqli_fetch_array($res);//вытаскиваем данные из запроса

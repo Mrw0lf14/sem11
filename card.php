@@ -3,31 +3,32 @@
  	if($_SESSION['username'] == 'admin') {
  		$isadmin = true;
  	}
- 	$id = $_GET['id'];
+ 	$id = $_GET['id'];// в юрл из файла лист мы берем, что нужно показать
  	$host = 'localhost'; // имя хоста (уточняется у провайдера)
 	$database = 'homework'; // имя базы данных, которую вы должны создать
 	$user = 'root'; // заданное вами имя пользователя, либо определенное провайдером
 	$table = 'things';//название таблицы
 	$pswd = 'gavl228_A'; // заданный вами пароль
 	$link = mysqli_connect($host, $user, $pswd, $database) or die("Ошибка " . mysqli_error($link));// подключаемся к серверу
-	$table2 = 'comments';
+	$table2 = 'comments';//название таблицы, где сохранены коментарии
 
 	$query = "SELECT * FROM $table WHERE id=$id";
 	$res = mysqli_query($link ,$query);
 	
-	$row = mysqli_fetch_array($res);
-	$thing_type = $row[1];
-	$thing_name = $row[2];
-	$thing_discr = $row[3];
-	$thing_owner = $row[4];
+	$row = mysqli_fetch_array($res);//вытащить данные из запроса
+	//первый столбец айди, по нему мы нашли наш товар
+	$thing_type = $row[1];// второй столбец
+	$thing_name = $row[2];//третий
+	$thing_discr = $row[3];//четвертый
+	$thing_owner = $row[4];//...
 	$thing_price = $row[5];
 	$thing_pict = $row[6];
 	$thing_likes = $row[7];
 	$thing_nlike = $row[8];
 	echo "$thing_likes<br>";
 	echo "$thing_nlike<br>";
-
-	$query = "SELECT * FROM $table2 WHERE id=$id";
+	//следующий запрос нужен для коментариев 
+	$query = "SELECT * FROM $table2 WHERE id=$id";//*
 	$res = mysqli_query($link ,$query);
  ?>
 <!DOCTYPE html>
@@ -70,6 +71,7 @@
 	</article>
 	<div>
 		<?php  
+			//вытащили из *
 			while ($row = mysqli_fetch_row($res)) {
 				$comtext = $row[1];
 				$comname = $row[2];
@@ -84,7 +86,7 @@
 </body>
 </html>
 <?php
-	if (isset($_POST['type'])) {
+	if (isset($_POST['type'])) {//если админ поправил данные
     	$type = $_POST['type'];
 		$name = $_POST['name'];
 		$discription = $_POST['discription'];
@@ -94,20 +96,20 @@
 		$likes = $_POST['likes'] + $thing_likes;
 		$nlike = $thing_nlike+1;
 
-		$query = "UPDATE $table SET type = '$type', name = '$name', dicription = '$discription', owner = '$owner', price= '$price', likes = $likes, nlike = $nlike WHERE id = $id";
+		$query = "UPDATE $table SET type = '$type', name = '$name', dicription = '$discription', owner = '$owner', price= '$price', likes = $likes, nlike = $nlike WHERE id = $id";//обновляем данные
 		$res = mysqli_query($link ,$query);//задаем вопрос
 		//echo mysqli_errno($link) . ": " . mysqli_error($link) . "\n";
-		header( "refresh:1;");
+		header( "refresh:1;");// обновляем страницу, чтобы увидеть изменения
 	}
 
-	if (isset($_POST['likes'])){
+	if (isset($_POST['likes'])){// если пользователь поставил оценку
 		$likes = $_POST['likes'] + $thing_likes;
 		$nlike = $thing_nlike+1;
-		$query = "UPDATE $table SET likes = $likes, nlike = $nlike WHERE id = $id";
+		$query = "UPDATE $table SET likes = $likes, nlike = $nlike WHERE id = $id";//запишем ее в столбец с числом баллов и оценок, чтобы удобнее было считать среднее арифметическое
 		$res = mysqli_query($link ,$query);
 	}
 
-	if(isset($_POST['comtext'])){
+	if(isset($_POST['comtext'])){//если оставлен коментарий мы его сохраним
 		$comname = $_SESSION['username'];
 		$comtext = $_POST['comtext'];
 		echo "$comtext";
